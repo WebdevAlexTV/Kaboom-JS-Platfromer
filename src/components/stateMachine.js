@@ -1,37 +1,40 @@
 export const states = {
-  IDLE: "IDLE",
-  MOVE: "MOVE",
-  SHOOT: "SHOOT",
-  ATTACK: "ATTACK",
+    IDLE: "IDLE",
+    MOVE: "MOVE",
+    SHOOT: "SHOOT",
+    ATTACK: "ATTACK",
+    // TODO: Implement suffer!
+    SUFFER: "SUFFER",
+    DIE: "DIE",
 };
 
 const stateMachine = (initialState, stateActions) => {
-  let currentState = initialState;
+    let currentState = initialState;
 
-  const changeState = (state, context) => {
-    if (
-      stateActions[state] &&
-      stateActions[state].canResolve &&
-      stateActions[state].canResolve(context)
-    ) {
-      stateActions[state].resolve(context);
-      currentState = state;
+    const changeState = (state, context) => {
+        if (
+            stateActions[state] &&
+            stateActions[state].canResolve &&
+            stateActions[state].canResolve(context)
+        ) {
+            stateActions[state].resolve(context);
+            currentState = state;
 
-      return true;
-    } else {
-      return false;
-    }
-  };
+            return true;
+        } else {
+            return false;
+        }
+    };
 
-  const updateAction = (context) => {
-    stateActions[currentState].updateAction(context);
-  };
+    const updateAction = (context) => {
+        stateActions[currentState].updateAction(context);
+    };
 
-  return {
-    state: currentState,
-    changeState,
-    updateAction,
-  };
+    return {
+        state: currentState,
+        changeState,
+        updateAction,
+    };
 };
 
 export default stateMachine;
