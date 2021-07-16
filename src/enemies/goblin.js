@@ -3,6 +3,7 @@ import k from "../kaboom";
 import stateMachine, { states } from "../components/stateMachine";
 import health from "../components/health";
 import { getPlayer } from "../player";
+import bouncable from "../components/bounce";
 
 const stateActions = {
   /**
@@ -35,14 +36,14 @@ const stateActions = {
   [states.MOVE]: {
     updateAction: (goblin) => {
       const player = getPlayer();
-      goblin.move(constants.ENEMY_SPEED * goblin.moveDirection, 0);
-      goblin.scale.x = goblin.moveDirection;
+      goblin.move(constants.ENEMY_SPEED * goblin.viewDirection, 0);
+      goblin.scale.x = goblin.viewDirection;
 
       if (goblin.pos.x - player.pos.x < -10) {
-        goblin.moveDirection = 1;
+        goblin.viewDirection = 1;
       }
       if (goblin.pos.x - player.pos.x > 10) {
-        goblin.moveDirection = -1;
+        goblin.viewDirection = -1;
       }
 
       if (goblin.frame === 5) {
@@ -124,6 +125,7 @@ const onGoblinAdded = (goblin) => {
   k.collides("player", "goblin", (player, goblin) => {
     goblin.changeState(states.ATTACK, goblin);
     player.changeState(states.SUFFER, player);
+    player.bounce(goblin.viewDirection);
     player.suffer(1);
     k.camShake(6);
   });
@@ -150,8 +152,9 @@ export const goblinConfig = () => {
     k.body(),
     stateMachine(states.IDLE, stateActions),
     health(3),
+    bouncable(),
     {
-      moveDirection: -1,
+      viewDirection: -1,
       add() {
         onGoblinAdded(this);
       },

@@ -76,6 +76,7 @@ const shoot = () => {
         bullet.explode();
         k.destroy(bullet);
         enemy.suffer(1);
+        enemy.bounce(this.viewDirection);
       });
     },
   };

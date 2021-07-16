@@ -8,7 +8,7 @@ const control = () => {
       const player = this;
       // Jump
       k.keyPress("space", () => {
-        if (player.isDead()) {
+        if (!player.canInteract()) {
           return;
         }
         player.changeState(states.JUMP, player);
@@ -16,7 +16,7 @@ const control = () => {
 
       // Move left
       k.keyDown("left", () => {
-        if (player.isDead()) {
+        if (!player.canInteract()) {
           return;
         }
         player.run(-1);
@@ -27,7 +27,7 @@ const control = () => {
       });
 
       k.keyRelease("left", () => {
-        if (player.isDead()) {
+        if (!player.canInteract()) {
           return;
         }
         if (player.grounded()) {
@@ -37,7 +37,7 @@ const control = () => {
 
       // Move right
       k.keyDown("right", () => {
-        if (player.isDead()) {
+        if (!player.canInteract()) {
           return;
         }
         player.run(1);
@@ -48,7 +48,7 @@ const control = () => {
       });
 
       k.keyRelease("right", () => {
-        if (player.isDead()) {
+        if (!player.canInteract()) {
           return;
         }
         if (player.grounded()) {
@@ -58,7 +58,7 @@ const control = () => {
 
       // Attack
       k.keyPress("c", () => {
-        if (player.isDead()) {
+        if (!player.canInteract()) {
           return;
         }
         player.changeState(states.SHOOT, player);

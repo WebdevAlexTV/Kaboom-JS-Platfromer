@@ -4,6 +4,7 @@ import health from "./components/health";
 import control from "./components/control";
 import stateMachine, { states } from "./components/stateMachine";
 import constants from "./constants";
+import bouncable from "./components/bounce";
 
 const stateActions = {
   /**
@@ -124,6 +125,7 @@ const initPlayer = () => {
     shoot(),
     health(3),
     control(),
+    bouncable(),
     stateMachine(states.IDLE, stateActions),
     "player",
     {
@@ -171,6 +173,9 @@ const initPlayer = () => {
       },
       isDead() {
         return this.getState() === states.DIE;
+      },
+      canInteract() {
+        return this.getState() !== states.SUFFER && !this.isDead();
       },
     },
   ]);

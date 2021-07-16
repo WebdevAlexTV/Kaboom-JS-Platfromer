@@ -3,6 +3,7 @@ import initPlayer from "../player";
 import { goblinConfig } from "../enemies/goblin";
 import initUi from "../ui";
 import initCamera from "../camera";
+import { birdConfig } from "../ambient/bird";
 
 const level = [
   "                                                                                             ",
@@ -17,7 +18,7 @@ const level = [
   "H                      <---->                                                                ",
   "H           <---->                                                                           ",
   "H                                          <->                                               ",
-  "H                  G                                                                         ",
+  "H   B              G                                                                         ",
   "L===================================]    [====================================================",
   "####################################)    (######################################################",
 ];
@@ -124,6 +125,7 @@ const main = () => {
       "block",
     ],
     G: goblinConfig(),
+    B: birdConfig(),
   });
 };
 

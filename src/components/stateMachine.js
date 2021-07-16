@@ -22,7 +22,9 @@ const stateMachine = (initialState, stateActions) => {
       stateActions[state].canResolve(context)
     ) {
       stateActions[state].resolve(context);
-      lastState = currentState;
+      if (state !== states.SUFFER) {
+        lastState = currentState;
+      }
       currentState = state;
 
       return true;
