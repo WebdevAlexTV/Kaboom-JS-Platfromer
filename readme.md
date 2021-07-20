@@ -13,9 +13,10 @@ Wir bauen einen Platformer mit Kaboom.js
 [x] Goblin bei Doppelbeschuss wieder aus Suffer befreien
 [x] Goblin bounced den Spieler bei Damage weg
 [x] Vogel implementieren
-[ ] Handling bei mehreren Vögeln optimieren
-[ ] Move state vom Vogel muss zu Fly umbenannt werden, move wird laufen auf dem Boden
-[ ] Vogel soll zwischen idle und move wechseln, wenn der Spieler ihn nichtt verscheucht
+[x] Move state vom Vogel muss zu Fly umbenannt werden, move wird laufen auf dem Boden
+[x] Vogel soll zwischen idle und move wechseln, wenn der Spieler ihn nicht verscheucht
+[x] Handling bei mehreren Vögeln optimieren
+[ ] Spiel beenden, wenn Spieler runterfällt
 [ ] Vogel soll sanft landen (vielleicht ein landing state?)
 [ ] Hase implementieren
 [ ] Bombengoblin implementieren

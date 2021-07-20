@@ -70,7 +70,7 @@ const loadSprites = () => {
       },
       idle: {
         from: 19,
-        to: 22,
+        to: 21,
       },
       die: {
         from: 6,

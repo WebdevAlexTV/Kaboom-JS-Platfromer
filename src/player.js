@@ -89,9 +89,6 @@ const stateActions = {
     resolve: (player) => {
       player.play("die", false);
     },
-    canResolve: (player) => {
-      return true;
-    },
   },
 };
 
@@ -150,9 +147,16 @@ const initPlayer = () => {
           }
         });
       },
+      /**
+       * Check if the user can jump.
+       * @returns
+       */
       canJump() {
         return this.grounded() || this.isDoubleJumpging === false;
       },
+      /**
+       * Perform the jump if possible.
+       */
       doJump() {
         if (this.canJump()) {
           if (!this.grounded()) {
@@ -166,14 +170,26 @@ const initPlayer = () => {
           this.jump(constants.JUMP_FORCE);
         }
       },
+      /**
+       * Run in the given direction.
+       * @param {*} direction
+       */
       run(direction) {
         this.viewDirection = direction;
         this.scale.x = direction;
         this.move(this.viewDirection * constants.MOVE_SPEED, 0);
       },
+      /**
+       * Checks if the player is dead.
+       * @returns
+       */
       isDead() {
         return this.getState() === states.DIE;
       },
+      /**
+       * Check if the player can interact (via keys).
+       * @returns
+       */
       canInteract() {
         return this.getState() !== states.SUFFER && !this.isDead();
       },
@@ -197,6 +213,13 @@ const initPlayer = () => {
       k.destroy(player);
     });
     k.sceneData().lost = true;
+  });
+
+  player.action(() => {
+    if (player.pos.y > k.height() * 3) {
+      player.suffer(player.getMaxHealth());
+      k.add([k.text("Ooops, you're dead!", 10), k.pos(20, 20), k.layer("ui")]);
+    }
   });
 
   return player;

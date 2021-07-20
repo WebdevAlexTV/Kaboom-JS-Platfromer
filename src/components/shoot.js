@@ -8,10 +8,18 @@ const shoot = () => {
     timeSinceLastShot += k.dt();
   });
 
+  /**
+   * Check if the game object can shoot.
+   *
+   * @returns
+   */
   function canShoot() {
     return timeSinceLastShot >= constants.SHOOT_DELAY;
   }
 
+  /**
+   * If the game object can shoot, it shoots.
+   */
   function shoot() {
     if (this.canShoot()) {
       this.play("shoot", false);
@@ -42,6 +50,7 @@ const shoot = () => {
                 },
               },
             ]);
+            k.destroy(bullet);
           },
         },
       ]);
@@ -61,20 +70,17 @@ const shoot = () => {
         // remove the bullet if it's out of the scene for performance
         if (bullet.pos.x > this.pos.x + k.width()) {
           k.destroy(bullet);
-          console.log("bullet destroyed");
         }
       });
 
       // Bullet vs. block
       k.collides("bullet", "block", (bullet, block) => {
         bullet.explode();
-        k.destroy(bullet);
       });
 
       // Bullet vs. enemy
       k.collides("bullet", "enemy", (bullet, enemy) => {
         bullet.explode();
-        k.destroy(bullet);
         enemy.suffer(1);
         enemy.bounce(this.viewDirection);
       });

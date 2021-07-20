@@ -2,8 +2,8 @@ import constants from "../constants";
 import k from "../kaboom";
 import stateMachine, { states } from "../components/stateMachine";
 import health from "../components/health";
-import { getPlayer } from "../player";
 import bouncable from "../components/bounce";
+import distance from "../components/distance";
 
 const stateActions = {
   /**
@@ -11,20 +11,27 @@ const stateActions = {
    */
   [states.IDLE]: {
     updateAction: (goblin) => {
-      const player = getPlayer();
-      if (
-        goblin.pos.x - player.pos.x > -150 &&
-        goblin.pos.x - player.pos.x < 150
-      ) {
+      if (goblin.distanceToPlayer() > 150) {
         goblin.changeState(states.MOVE, goblin);
-      }
-      if (goblin.frame === 22) {
-        goblin.play("idle");
       }
     },
     resolve: (goblin) => {
       goblin.changeSprite("goblin");
-      goblin.frame = 22;
+      goblin.play("idle", false);
+    },
+    canResolve: (goblin) => {
+      return !goblin.isSuffering();
+    },
+  },
+  /**
+   * WAIT
+   */
+  [states.WAIT]: {
+    updateAction: (goblin) => {},
+    resolve: (goblin) => {
+      goblin.changeState(states.IDLE, goblin, 1);
+      goblin.changeSprite("goblin");
+      goblin.play("idle");
     },
     canResolve: (goblin) => {
       return !goblin.isSuffering();
@@ -35,24 +42,16 @@ const stateActions = {
    */
   [states.MOVE]: {
     updateAction: (goblin) => {
-      const player = getPlayer();
       goblin.move(constants.ENEMY_SPEED * goblin.viewDirection, 0);
       goblin.scale.x = goblin.viewDirection;
 
-      if (goblin.pos.x - player.pos.x < -10) {
-        goblin.viewDirection = 1;
-      }
-      if (goblin.pos.x - player.pos.x > 10) {
-        goblin.viewDirection = -1;
-      }
-
-      if (goblin.frame === 5) {
-        goblin.play("run");
+      if (goblin.distanceToPlayer() > 10) {
+        goblin.viewDirection = goblin.playerPos();
       }
     },
     resolve: (goblin) => {
       goblin.changeSprite("goblin");
-      goblin.frame = 5;
+      goblin.play("run");
     },
     canResolve: (goblin) => {
       return !goblin.isSuffering();
@@ -62,17 +61,11 @@ const stateActions = {
    * Attack
    */
   [states.ATTACK]: {
-    updateAction: (goblin) => {
-      if (goblin.frame === 11) {
-        goblin.play("attack");
-      }
-    },
+    updateAction: (goblin) => {},
     resolve: (goblin) => {
       goblin.changeSprite("goblin_attack");
-      goblin.frame = 11;
-      k.wait(1, () => {
-        goblin.changeState(states.MOVE, goblin);
-      });
+      goblin.play("attack", false);
+      goblin.changeState(states.MOVE, goblin, 1.2);
     },
     canResolve: (goblin) => {
       return !goblin.isSuffering();
@@ -130,6 +123,18 @@ const onGoblinAdded = (goblin) => {
     k.camShake(6);
   });
 
+  // If the goblin collides with each other
+  k.collides("goblin", "goblin", (goblin, goblin2) => {
+    if (!goblin.isCurrentState(states.ATTACKING)) {
+      goblin.move(goblin.viewDirection * -1 * 10);
+      goblin.changeState(states.WAIT, goblin);
+    }
+    if (!goblin2.isCurrentState(states.ATTACKING)) {
+      goblin2.move(goblin2.viewDirection * -1 * 10);
+      goblin2.changeState(states.WAIT, goblin2);
+    }
+  });
+
   // When an animation of the goblin ends
   goblin.on("animEnd", (anim) => {
     if (anim === "suffer") {
@@ -139,8 +144,8 @@ const onGoblinAdded = (goblin) => {
   });
 };
 
-export const goblinConfig = () => {
-  return [
+const spawnGoblin = (pos) => {
+  k.add([
     k.sprite("goblin", {
       frame: 22,
     }),
@@ -149,14 +154,27 @@ export const goblinConfig = () => {
     "enemy",
     k.scale(1),
     k.origin("center"),
+    k.pos(pos),
     k.body(),
     stateMachine(states.IDLE, stateActions),
     health(3),
     bouncable(),
+    distance(),
     {
       viewDirection: -1,
       add() {
         onGoblinAdded(this);
+      },
+    },
+  ]);
+};
+
+export const goblinConfig = () => {
+  return [
+    {
+      add() {
+        spawnGoblin(this.pos);
+        k.destroy(this);
       },
     },
   ];
