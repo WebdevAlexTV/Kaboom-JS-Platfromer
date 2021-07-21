@@ -4,6 +4,8 @@ import stateMachine, { states } from "../components/stateMachine";
 import health from "../components/health";
 import bouncable from "../components/bounce";
 import distance from "../components/distance";
+import { getPlayer } from "../player";
+import viewDirection from "../components/viewDirection";
 
 const stateActions = {
   /**
@@ -11,13 +13,17 @@ const stateActions = {
    */
   [states.IDLE]: {
     updateAction: (goblin) => {
-      if (goblin.distanceToPlayer() > 150) {
+      const player = getPlayer();
+      if (
+        goblin.distanceToGameobject(player) < 150 &&
+        goblin.distanceToGameobject(player) > 10
+      ) {
         goblin.changeState(states.MOVE, goblin);
       }
     },
     resolve: (goblin) => {
       goblin.changeSprite("goblin");
-      goblin.play("idle", false);
+      goblin.play("idle");
     },
     canResolve: (goblin) => {
       return !goblin.isSuffering();
@@ -29,9 +35,9 @@ const stateActions = {
   [states.WAIT]: {
     updateAction: (goblin) => {},
     resolve: (goblin) => {
-      goblin.changeState(states.IDLE, goblin, 1);
       goblin.changeSprite("goblin");
       goblin.play("idle");
+      goblin.changeState(states.IDLE, goblin, 1);
     },
     canResolve: (goblin) => {
       return !goblin.isSuffering();
@@ -42,11 +48,16 @@ const stateActions = {
    */
   [states.MOVE]: {
     updateAction: (goblin) => {
-      goblin.move(constants.ENEMY_SPEED * goblin.viewDirection, 0);
-      goblin.scale.x = goblin.viewDirection;
+      const player = getPlayer();
+      goblin.move(constants.ENEMY_SPEED * goblin.getViewDirection(), 0);
+      goblin.scale.x = goblin.getViewDirection();
 
-      if (goblin.distanceToPlayer() > 10) {
-        goblin.viewDirection = goblin.playerPos();
+      if (goblin.distanceToGameobject(player) > 10) {
+        goblin.setViewDirection(goblin.gameobjectPos(player));
+      } else {
+        if (goblin.distanceToGameobject(player, "y") > 20) {
+          goblin.changeState(states.WAIT, goblin);
+        }
       }
     },
     resolve: (goblin) => {
@@ -116,22 +127,44 @@ const onGoblinAdded = (goblin) => {
 
   // If the goblin collides with the player
   k.collides("player", "goblin", (player, goblin) => {
-    goblin.changeState(states.ATTACK, goblin);
-    player.changeState(states.SUFFER, player);
-    player.bounce(goblin.viewDirection);
-    player.suffer(1);
-    k.camShake(6);
+    if (!goblin.isCurrentState(states.DIE)) {
+      if (goblin.distanceToGameobject(player, "y") < 5) {
+        goblin.changeState(states.ATTACK, goblin);
+        player.changeState(states.SUFFER, player);
+        player.suffer(1);
+        k.camShake(6);
+        player.bounce(goblin.getViewDirection());
+      } else {
+        if (!goblin.isCurrentState(states.SUFFER)) {
+          goblin.suffer(1);
+          goblin.changeState(states.SUFFER, goblin);
+        }
+        player.doJump(true);
+      }
+    }
   });
 
   // If the goblin collides with each other
   k.collides("goblin", "goblin", (goblin, goblin2) => {
+    const player = getPlayer();
+
     if (!goblin.isCurrentState(states.ATTACKING)) {
-      goblin.move(goblin.viewDirection * -1 * 10);
-      goblin.changeState(states.WAIT, goblin);
+      if (
+        goblin.distanceToGameobject(player) >
+        goblin2.distanceToGameobject(player)
+      ) {
+        goblin.move(goblin.gameobjectPos(player) * -1 * 10);
+        goblin.changeState(states.WAIT, goblin);
+      }
     }
     if (!goblin2.isCurrentState(states.ATTACKING)) {
-      goblin2.move(goblin2.viewDirection * -1 * 10);
-      goblin2.changeState(states.WAIT, goblin2);
+      if (
+        goblin2.distanceToGameobject(player) >
+        goblin.distanceToGameobject(player)
+      ) {
+        goblin2.move(goblin2.getViewDirection() * -1 * 10);
+        goblin2.changeState(states.WAIT, goblin2);
+      }
     }
   });
 
@@ -160,8 +193,8 @@ const spawnGoblin = (pos) => {
     health(3),
     bouncable(),
     distance(),
+    viewDirection(),
     {
-      viewDirection: -1,
       add() {
         onGoblinAdded(this);
       },

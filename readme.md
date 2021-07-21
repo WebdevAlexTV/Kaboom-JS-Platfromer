@@ -16,13 +16,14 @@ Wir bauen einen Platformer mit Kaboom.js
 [x] Move state vom Vogel muss zu Fly umbenannt werden, move wird laufen auf dem Boden
 [x] Vogel soll zwischen idle und move wechseln, wenn der Spieler ihn nicht verscheucht
 [x] Handling bei mehreren Vögeln optimieren
-[ ] Spiel beenden, wenn Spieler runterfällt
+[x] Spiel beenden, wenn Spieler runterfällt
 [ ] Vogel soll sanft landen (vielleicht ein landing state?)
 [ ] Hase implementieren
 [ ] Bombengoblin implementieren
 [ ] Wurm implementieren
 [ ] Großen Wurm implementieren, der beim Tod viele kleine Würmer spawnt.
 [ ] Spieler soll beim Bewegen nicht im Idle hängen bleiben
+[ ] Level weiter ausbauen
 [ ] (WIP) Ab hier dann freestyle 😂
 
 ## Assets

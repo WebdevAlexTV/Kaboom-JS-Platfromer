@@ -15,12 +15,12 @@ const level = [
   "H                                                                                            ",
   "H                                                                                            ",
   "H                              <>                                                            ",
-  "H                      <---->                                                                ",
+  "H                        <---->                                                              ",
   "H           <---->                                                                           ",
   "H                                          <->                                               ",
-  "H       B     B    G             G                                                           ",
-  "L===================================]    [===================================================",
-  "####################################)    (###################################################",
+  "L===T    B          G               G                                                        ",
+  "####L===============================]WWWW[===================================================",
+  "####################################)WWWW(####################################################",
 ];
 
 const main = () => {
@@ -28,13 +28,16 @@ const main = () => {
 
   const player = initPlayer();
 
-  k.layers(["bg", "obj", "ambient", "ui"], "obj");
+  k.layers(["bg", "ambient_bg", "obj", "ambient", "ui"], "obj");
 
   // Handle the camera
   initCamera();
 
   // Initialize the ui
   initUi();
+
+  k.add([k.sprite("background"), k.layer("bg")]);
+  k.add([k.sprite("background2"), k.layer("bg")]);
 
   k.addLevel(level, {
     width: 16,
@@ -46,6 +49,22 @@ const main = () => {
       }),
       k.solid(),
       "block",
+      {
+        add() {
+          const random = Math.random();
+          if (random > 0.9 || random < 0.1) {
+            const sprite = random > 0.9 ? "grass" : "drygrass";
+            const position = { ...this.pos };
+            position.x += 8;
+            k.add([
+              k.sprite(sprite),
+              "ambient",
+              k.origin("bot"),
+              k.pos(position),
+            ]);
+          }
+        },
+      },
     ],
     T: [
       k.sprite("tileset", {
@@ -123,6 +142,20 @@ const main = () => {
       }),
       k.solid(),
       "block",
+    ],
+    W: [
+      {
+        add() {
+          const waterfall = k.add([
+            k.sprite("waterfall"),
+            k.layer("ambient_bg"),
+            "waterfall",
+            k.pos({ ...this.pos, y: this.pos.y + 2 }),
+          ]);
+          waterfall.play("waterfall");
+          //k.destroy(this);
+        },
+      },
     ],
     G: goblinConfig(),
     B: birdConfig(),

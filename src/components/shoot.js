@@ -30,7 +30,7 @@ const shoot = () => {
         k.origin("center"),
         "bullet",
         {
-          direction: this.viewDirection,
+          direction: this.getViewDirection(),
           add() {
             this.play("fly");
           },
@@ -82,7 +82,7 @@ const shoot = () => {
       k.collides("bullet", "enemy", (bullet, enemy) => {
         bullet.explode();
         enemy.suffer(1);
-        enemy.bounce(this.viewDirection);
+        enemy.bounce(this.getViewDirection());
       });
     },
   };

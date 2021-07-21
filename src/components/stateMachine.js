@@ -22,6 +22,7 @@ const stateMachine = (initialState, stateActions) => {
 
   /**
    * Change the game object to the given state.
+   *
    * @param {*} state The state we want to set.
    * @param {*} context The context game object.
    * @param {*} timeout If set, change the state after the given amount of seconds is expired

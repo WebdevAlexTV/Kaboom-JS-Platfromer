@@ -7,6 +7,7 @@ const health = (initMaxHealth, initCurrentHealth = null) => {
 
   /**
    * Heal the given amount of health.
+   *
    * @param {*} value
    */
   function heal(value) {
@@ -19,6 +20,7 @@ const health = (initMaxHealth, initCurrentHealth = null) => {
 
   /**
    * Suffer the given amount of damage.
+   *
    * @param {*} value
    */
   function suffer(value) {

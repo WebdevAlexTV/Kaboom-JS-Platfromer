@@ -5,6 +5,7 @@ import control from "./components/control";
 import stateMachine, { states } from "./components/stateMachine";
 import constants from "./constants";
 import bouncable from "./components/bounce";
+import viewDirection from "./components/viewDirection";
 
 const stateActions = {
   /**
@@ -123,10 +124,10 @@ const initPlayer = () => {
     health(3),
     control(),
     bouncable(),
+    viewDirection(),
     stateMachine(states.IDLE, stateActions),
     "player",
     {
-      viewDirection: 1,
       isDoubleJumpging: false,
       add() {
         this.on("animEnd", (anim) => {
@@ -157,7 +158,7 @@ const initPlayer = () => {
       /**
        * Perform the jump if possible.
        */
-      doJump() {
+      doJump(small = false) {
         if (this.canJump()) {
           if (!this.grounded()) {
             this.isDoubleJumpging = true;
@@ -167,7 +168,7 @@ const initPlayer = () => {
           }
 
           addJumpEffect(this);
-          this.jump(constants.JUMP_FORCE);
+          this.jump(small ? constants.JUMP_FORCE / 2 : constants.JUMP_FORCE);
         }
       },
       /**
@@ -175,9 +176,9 @@ const initPlayer = () => {
        * @param {*} direction
        */
       run(direction) {
-        this.viewDirection = direction;
+        this.setViewDirection(direction);
         this.scale.x = direction;
-        this.move(this.viewDirection * constants.MOVE_SPEED, 0);
+        this.move(this.getViewDirection() * constants.MOVE_SPEED, 0);
       },
       /**
        * Checks if the player is dead.
@@ -218,7 +219,7 @@ const initPlayer = () => {
   player.action(() => {
     if (player.pos.y > k.height() * 3) {
       player.suffer(player.getMaxHealth());
-      k.add([k.text("Ooops, you're dead!", 10), k.pos(20, 20), k.layer("ui")]);
+      player.trigger("death");
     }
   });
 

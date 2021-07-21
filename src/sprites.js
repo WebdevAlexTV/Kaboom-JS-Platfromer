@@ -119,6 +119,19 @@ const loadSprites = () => {
   k.loadSprite("heart", "hearts_hud.png");
 
   k.loadSprite("background", "background.png");
+  k.loadSprite("background2", "background_2.png");
+  k.loadSprite("grass", "grass.png");
+  k.loadSprite("drygrass", "drygrass.png");
+  k.loadSprite("waterfall", "waterfall.png", {
+    sliceX: 4,
+    sliceY: 1,
+    anims: {
+      waterfall: {
+        from: 0,
+        to: 4,
+      },
+    },
+  });
 
   k.loadSprite("bird", "animals.png", {
     sliceX: 12,

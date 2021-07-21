@@ -1,10 +1,15 @@
-import constants from "../constants";
 import k from "../kaboom";
 
 const bouncable = () => {
   let isBouncing = false;
+  const bounceIntensity = 50;
   let bounceDirection = 1;
 
+  /**
+   * Bounce the gameobject into the given direction.
+   *
+   * @param {*} direction
+   */
   function bounce(direction) {
     bounceDirection = direction;
     isBouncing = true;
@@ -15,9 +20,10 @@ const bouncable = () => {
 
   return {
     bounce,
+    isBouncing: () => isBouncing,
     update() {
       if (isBouncing) {
-        this.move(bounceDirection * 50);
+        this.move(bounceDirection * bounceIntensity);
       }
     },
   };
