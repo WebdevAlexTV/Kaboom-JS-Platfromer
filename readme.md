@@ -17,6 +17,10 @@ Wir bauen einen Platformer mit Kaboom.js
 [x] Vogel soll zwischen idle und move wechseln, wenn der Spieler ihn nicht verscheucht
 [x] Handling bei mehreren Vögeln optimieren
 [x] Spiel beenden, wenn Spieler runterfällt
+[x] Melee Attack implementieren
+[ ] Beheben, dass das Huhn nen Moonwalk macht
+[ ] Nicht unendlich Munition vorhanden sein (müssen wird einsammeln)
+[ ] Anzeige der Munition
 [ ] Vogel soll sanft landen (vielleicht ein landing state?)
 [ ] Hase implementieren
 [ ] Bombengoblin implementieren

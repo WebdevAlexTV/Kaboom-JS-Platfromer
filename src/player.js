@@ -6,6 +6,7 @@ import stateMachine, { states } from "./components/stateMachine";
 import constants from "./constants";
 import bouncable from "./components/bounce";
 import viewDirection from "./components/viewDirection";
+import attack from "./components/attack";
 
 const stateActions = {
   /**
@@ -43,6 +44,19 @@ const stateActions = {
     },
     canResolve: (player) => {
       return player.canShoot() && !player.isDead() && !player.isSuffering();
+    },
+  },
+  /**
+   * Attack
+   */
+  [states.ATTACK]: {
+    updateAction: (player) => {},
+    resolve: (player) => {
+      player.attack();
+      player.play("shoot", false);
+    },
+    canResolve: (player) => {
+      return player.canAttack() && !player.isDead() && !player.isSuffering();
     },
   },
   /**
@@ -121,6 +135,7 @@ const initPlayer = () => {
     k.scale(1),
     k.body(),
     shoot(),
+    attack(),
     health(3),
     control(),
     bouncable(),

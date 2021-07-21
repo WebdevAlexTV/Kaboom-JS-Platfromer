@@ -2,7 +2,7 @@ import constants from "../constants";
 import k from "../kaboom";
 
 const shoot = () => {
-  let timeSinceLastShot = 0;
+  let timeSinceLastShot = constants.SHOOT_DELAY;
   // Runs every frame
   k.action(() => {
     timeSinceLastShot += k.dt();

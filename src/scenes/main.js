@@ -4,6 +4,7 @@ import { goblinConfig } from "../enemies/goblin";
 import initUi from "../ui";
 import initCamera from "../camera";
 import { birdConfig } from "../ambient/bird";
+import bomberGoblinConfig from "../enemies/goblinBomber";
 
 const level = [
   "                                                                                             ",
@@ -15,7 +16,7 @@ const level = [
   "H                                                                                            ",
   "H                                                                                            ",
   "H                              <>                                                            ",
-  "H                        <---->                                                              ",
+  "H              O         <---->                                                              ",
   "H           <---->                                                                           ",
   "H                                          <->                                               ",
   "L===T    B          G               G                                                        ",
@@ -158,6 +159,7 @@ const main = () => {
       },
     ],
     G: goblinConfig(),
+    O: bomberGoblinConfig(),
     B: birdConfig(),
   });
 };

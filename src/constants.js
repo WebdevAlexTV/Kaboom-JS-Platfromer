@@ -4,4 +4,5 @@ export default {
   ENEMY_SPEED: 50,
   BULLET_SPEED: 320,
   SHOOT_DELAY: 0.25, // seconds
+  ATTACK_DELAY: 0.25, // seconds
 };

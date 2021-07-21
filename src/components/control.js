@@ -56,12 +56,20 @@ const control = () => {
         }
       });
 
-      // Attack
-      k.keyPress("c", () => {
+      // Shoot
+      k.keyPress("f", () => {
         if (!player.canInteract()) {
           return;
         }
         player.changeState(states.SHOOT, player);
+      });
+
+      // Melee
+      k.keyPress("d", () => {
+        if (!player.canInteract()) {
+          return;
+        }
+        player.changeState(states.ATTACK, player);
       });
     },
   };

@@ -45,6 +45,28 @@ const loadSprites = () => {
     },
   });
 
+  k.loadSprite("sword_effect", "sword_effect.png", {
+    sliceX: 4,
+    sliceY: 1,
+    anims: {
+      effect: {
+        from: 0,
+        to: 3,
+      },
+    },
+  });
+
+  k.loadSprite("hit_sparkle", "hit_sparkle.png", {
+    sliceX: 4,
+    sliceY: 1,
+    anims: {
+      effect: {
+        from: 0,
+        to: 3,
+      },
+    },
+  });
+
   k.loadSprite("jump_effect", "hero.png", {
     sliceX: 8,
     sliceY: 15,
@@ -79,6 +101,51 @@ const loadSprites = () => {
       suffer: {
         from: 24,
         to: 26,
+      },
+    },
+  });
+
+  k.loadSprite("goblin_bomber", "goblin_bomber.png", {
+    sliceX: 6,
+    sliceY: 4,
+    anims: {
+      attack: {
+        from: 0,
+        to: 5,
+      },
+      die: {
+        from: 6,
+        to: 11,
+      },
+      idle: {
+        from: 12,
+        to: 15,
+      },
+      suffer: {
+        from: 18,
+        to: 20,
+      },
+    },
+  });
+
+  k.loadSprite("bomb_ticking", "bomb_ticking.png", {
+    sliceX: 3,
+    sliceY: 1,
+    anims: {
+      effect: {
+        from: 0,
+        to: 2,
+      },
+    },
+  });
+
+  k.loadSprite("bomb_exploding", "bomb_exploding.png", {
+    sliceX: 8,
+    sliceY: 1,
+    anims: {
+      effect: {
+        from: 0,
+        to: 7,
       },
     },
   });
