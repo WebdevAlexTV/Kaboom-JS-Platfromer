@@ -2,6 +2,8 @@ export default {
   JUMP_FORCE: 280,
   MOVE_SPEED: 80,
   ENEMY_SPEED: 50,
+  WORM_SPEED: 20,
+  WORM_SPAWN_AMOUNT: 3,
   BULLET_SPEED: 320,
   SHOOT_DELAY: 0.25, // seconds
   ATTACK_DELAY: 0.25, // seconds

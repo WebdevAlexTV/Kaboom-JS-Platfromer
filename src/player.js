@@ -134,7 +134,7 @@ const initPlayer = () => {
     k.pos(30, 200),
     k.scale(1),
     k.body(),
-    shoot(),
+    shoot(3),
     attack(),
     health(3),
     control(),
@@ -142,6 +142,7 @@ const initPlayer = () => {
     viewDirection(),
     stateMachine(states.IDLE, stateActions),
     "player",
+    "sufferable",
     {
       isDoubleJumpging: false,
       add() {
@@ -229,6 +230,10 @@ const initPlayer = () => {
       k.destroy(player);
     });
     k.sceneData().lost = true;
+  });
+
+  player.on("suffer", () => {
+    player.changeState(states.SUFFER, player);
   });
 
   player.action(() => {

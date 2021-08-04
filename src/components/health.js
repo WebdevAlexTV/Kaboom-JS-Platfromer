@@ -1,3 +1,5 @@
+import spawnBlood from "../effects/blood";
+
 const health = (initMaxHealth, initCurrentHealth = null) => {
   let maxHealth = initMaxHealth;
   let currentHealth =
@@ -24,6 +26,7 @@ const health = (initMaxHealth, initCurrentHealth = null) => {
    * @param {*} value
    */
   function suffer(value) {
+    spawnBlood(this.pos);
     if (currentHealth - value <= 0) {
       currentHealth = 0;
       this.trigger("death");

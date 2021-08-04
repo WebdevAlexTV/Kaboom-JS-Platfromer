@@ -4,7 +4,7 @@ import { getPlayer } from "./player";
 const initCamera = () => {
   const player = getPlayer();
 
-  k.camIgnore(["bg", "ui"]);
+  k.camIgnore(["bg", "ambient_bg", "ambient", "ui"]);
 
   // Let the camera follow the player.
   player.action(() => {

@@ -1,6 +1,7 @@
 import constants from "../constants";
 import k from "../kaboom";
 import viewDirection from "../components/viewDirection";
+import { addEffectText } from "../helpers";
 
 const attack = () => {
   let timeSinceLastAttack = constants.ATTACK_DELAY;
@@ -42,6 +43,7 @@ const attack = () => {
             k.origin("center"),
             {
               add() {
+                addEffectText(this, "Clink!");
                 this.play("effect", false);
                 this.on("animEnd", (anim) => {
                   if (anim === "effect") {
@@ -67,7 +69,7 @@ const attack = () => {
           k.collides("attack", "enemy", (attack, enemy) => {
             attack.hit();
             enemy.suffer(1);
-            enemy.bounce(this.getViewDirection());
+            enemy.bounce(attack.getViewDirection());
           });
 
           k.collides("attack", "block", (attack, block) => {

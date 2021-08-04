@@ -105,6 +105,17 @@ const loadSprites = () => {
     },
   });
 
+  k.loadSprite("goblin_attack", "goblin.png", {
+    sliceX: 4,
+    sliceY: 5,
+    anims: {
+      attack: {
+        from: 8,
+        to: 11,
+      },
+    },
+  });
+
   k.loadSprite("goblin_bomber", "goblin_bomber.png", {
     sliceX: 6,
     sliceY: 4,
@@ -128,6 +139,29 @@ const loadSprites = () => {
     },
   });
 
+  k.loadSprite("worm", "worm.png", {
+    sliceX: 6,
+    sliceY: 3,
+    anims: {
+      idle: {
+        from: 0,
+        to: 0,
+      },
+      run: {
+        from: 0,
+        to: 5,
+      },
+      suffer: {
+        from: 12,
+        to: 14,
+      },
+      die: {
+        from: 6,
+        to: 11,
+      },
+    },
+  });
+
   k.loadSprite("bomb_ticking", "bomb_ticking.png", {
     sliceX: 3,
     sliceY: 1,
@@ -146,17 +180,6 @@ const loadSprites = () => {
       effect: {
         from: 0,
         to: 7,
-      },
-    },
-  });
-
-  k.loadSprite("goblin_attack", "goblin.png", {
-    sliceX: 4,
-    sliceY: 5,
-    anims: {
-      attack: {
-        from: 8,
-        to: 11,
       },
     },
   });
@@ -230,6 +253,17 @@ const loadSprites = () => {
       walk: {
         from: 18,
         to: 23,
+      },
+    },
+  });
+
+  k.loadSprite("bomb_explosion", "explosion.png", {
+    sliceX: 5,
+    sliceY: 1,
+    anims: {
+      effect: {
+        from: 0,
+        to: 4,
       },
     },
   });

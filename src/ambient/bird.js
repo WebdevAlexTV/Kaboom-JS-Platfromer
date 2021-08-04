@@ -75,7 +75,8 @@ const stateActions = {
   },
 };
 
-const onBirdAdded = () => {
+const onBirdAdded = (bird) => {
+  bird.scale.x = bird.getViewDirection() * -1;
   // If the goblin collides with the player
   k.collides("bird", "enemy", (bird, enemy) => {
     if (!bird.escaping) {
@@ -110,7 +111,7 @@ const spawnBird = (pos) => {
       escaping: false,
       escapingTimer: 0,
       add() {
-        onBirdAdded();
+        onBirdAdded(this);
       },
       /**
        * Checks if the bird should escape.

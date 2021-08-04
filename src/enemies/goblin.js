@@ -6,6 +6,8 @@ import bouncable from "../components/bounce";
 import distance from "../components/distance";
 import { getPlayer } from "../player";
 import viewDirection from "../components/viewDirection";
+import { addEffectText } from "../helpers";
+import spawnMunition from "../items/munition";
 
 const stateActions = {
   /**
@@ -77,6 +79,7 @@ const stateActions = {
       goblin.changeSprite("goblin_attack");
       goblin.play("attack", false);
       goblin.changeState(states.MOVE, goblin, 1.2);
+      addEffectText(goblin, "Stab!");
     },
     canResolve: (goblin) => {
       return !goblin.isSuffering();
@@ -105,6 +108,7 @@ const stateActions = {
       goblin.changeSprite("goblin");
       goblin.play("die");
       k.wait(0.5, () => {
+        spawnMunition(goblin.pos);
         k.destroy(goblin);
       });
     },
@@ -130,7 +134,6 @@ const onGoblinAdded = (goblin) => {
     if (!goblin.isCurrentState(states.DIE)) {
       if (goblin.distanceToGameobject(player, "y") < 5) {
         goblin.changeState(states.ATTACK, goblin);
-        player.changeState(states.SUFFER, player);
         player.suffer(1);
         k.camShake(6);
         player.bounce(goblin.getViewDirection());
@@ -182,9 +185,9 @@ const spawnGoblin = (pos) => {
     k.sprite("goblin", {
       frame: 22,
     }),
-    k.solid(),
     "goblin",
     "enemy",
+    "sufferable",
     k.scale(1),
     k.origin("center"),
     k.pos(pos),

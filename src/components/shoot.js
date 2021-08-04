@@ -1,8 +1,12 @@
 import constants from "../constants";
+import { spawnExplosion } from "../items/munition";
 import k from "../kaboom";
 
-const shoot = () => {
+const shoot = (max, current = null) => {
   let timeSinceLastShot = constants.SHOOT_DELAY;
+  let maxMunition = max;
+  let currentMunition = current === null ? max : current;
+
   // Runs every frame
   k.action(() => {
     timeSinceLastShot += k.dt();
@@ -14,7 +18,31 @@ const shoot = () => {
    * @returns
    */
   function canShoot() {
-    return timeSinceLastShot >= constants.SHOOT_DELAY;
+    return timeSinceLastShot >= constants.SHOOT_DELAY && currentMunition > 0;
+  }
+
+  /**
+   * Spawn an orb as projectile.
+   *
+   * @param {*} position
+   * @param {*} direction
+   */
+  function spawnOrb(position, direction) {
+    k.add([
+      k.sprite("orb"),
+      k.pos(position),
+      k.origin("center"),
+      "bullet",
+      {
+        direction,
+        add() {
+          this.play("fly");
+        },
+        explode() {
+          spawnExplosion(this);
+        },
+      },
+    ]);
   }
 
   /**
@@ -24,42 +52,27 @@ const shoot = () => {
     if (this.canShoot()) {
       this.play("shoot", false);
       timeSinceLastShot = 0;
-      k.add([
-        k.sprite("orb"),
-        k.pos(this.pos),
-        k.origin("center"),
-        "bullet",
-        {
-          direction: this.getViewDirection(),
-          add() {
-            this.play("fly");
-          },
-          explode() {
-            const bullet = this;
-            // Add the explosion effect.
-            k.add([
-              k.sprite("orb_explosion"),
-              k.pos(bullet.pos),
-              k.origin("center"),
-              {
-                add() {
-                  this.play("explode");
-                  k.wait(0.5, () => {
-                    k.destroy(this);
-                  });
-                },
-              },
-            ]);
-            k.destroy(bullet);
-          },
-        },
-      ]);
+      currentMunition--;
+      spawnOrb(this.pos, this.getViewDirection());
     }
   }
 
   return {
     shoot,
     canShoot,
+    getCurrentMunition() {
+      return currentMunition;
+    },
+    getMaxMunition() {
+      return maxMunition;
+    },
+    addMunition(value) {
+      if (currentMunition + value <= maxMunition) {
+        currentMunition += value;
+      } else {
+        currentMunition = maxMunition;
+      }
+    },
     add() {
       // Handle the bullet movement
       k.action("bullet", (bullet) => {

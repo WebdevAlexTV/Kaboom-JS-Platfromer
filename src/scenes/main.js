@@ -5,6 +5,7 @@ import initUi from "../ui";
 import initCamera from "../camera";
 import { birdConfig } from "../ambient/bird";
 import bomberGoblinConfig from "../enemies/goblinBomber";
+import wormConfig from "../enemies/worm";
 
 const level = [
   "                                                                                             ",
@@ -15,11 +16,11 @@ const level = [
   "H                                                                                            ",
   "H                                                                                            ",
   "H                                                                                            ",
-  "H                              <>                                                            ",
-  "H              O         <---->                                                              ",
+  "H                           O  <>                                                            ",
+  "H             B          <---->                                                              ",
   "H           <---->                                                                           ",
   "H                                          <->                                               ",
-  "L===T    B          G               G                                                        ",
+  "L===T        Z          G           G                                                        ",
   "####L===============================]WWWW[===================================================",
   "####################################)WWWW(####################################################",
 ];
@@ -161,6 +162,7 @@ const main = () => {
     G: goblinConfig(),
     O: bomberGoblinConfig(),
     B: birdConfig(),
+    Z: wormConfig(),
   });
 };
 
