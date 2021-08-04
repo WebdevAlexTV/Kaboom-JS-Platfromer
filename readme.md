@@ -2,6 +2,12 @@
 
 Wir bauen einen Platformer mit Kaboom.js
 
+## Ausprobieren
+
+https://webdevalex.surge.sh/
+
+## Todos
+
 [x] Auswählen von passenden Grafiken für das Spiel
 [x] Basic Level bauen
 [x] Character einbinden, der sich bewegen lässt
